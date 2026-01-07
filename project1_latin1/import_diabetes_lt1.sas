@@ -14,7 +14,7 @@ run;
 libname project1 "&path./&project._&encoding.";
 
 data project1.diabetes;
-    infile '/home/student/quick-start/diabetes.csv' dsd dlm=',' firstobs=2;
+    infile "&path/diabetes.csv" dsd dlm=',' firstobs=2;
     input Gender:$1 Age:3. Urea:3. Cr:3. HbA1c:3. Chol:3. TG:3. HDL:3. LDL:3.
         VLDL:3. BMI:2. Class:$1.;
 run;
@@ -48,6 +48,15 @@ options fmtsearch=(project1/locale);
 proc print data=project1.diabetes (obs=10);
     format gender $gender. age age.;
 run;
+options mstored sasmstore=project1;
+%macro report(locale=fr_FR, obs=10) /store des="report by locale";
+options locale=&locale;
+options fmtsearch=(project1/locale);
+proc print data=project1.diabetes (obs=10);
+    format gender $gender. age age.;
+run;
+%mend report; 
+%report(locale=en_us,obs=10)
+%report(locale=fr_fr,obs=10)
 
-proc cport lib=project1 file="&path./&project._&encoding./&project..xpt";
-    run; 
+
