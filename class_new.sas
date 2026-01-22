@@ -1,4 +1,4 @@
-%let gender=F; 
+%let gender=M; 
 data class_new; 
     set sashelp.class; 
     ratio=height/weight; 
